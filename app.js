@@ -2,6 +2,7 @@ const fs = require("fs");
 const axios = require("axios");
 const express = require("express");
 const { clear } = require("console");
+const { json } = require("body-parser");
 const app = express();
 const port = 3000;
 app.get("/", (req, res) => {
@@ -64,41 +65,63 @@ const copyFile = (fileName) => {
   });
 };
 // copyFile("data.txt")
-const post = JSON.stringify({
+
+// the API Expects JSON data to be sent and that's why `JSON.stringify` is used
+const newPost = JSON.stringify({
   title: "JavaScript Basics",
-  body: "This post contains information about javaScript ",
+  body: "This post contains information about javaScript",
   // the id of the user who is going to create the post
   userId: 1,
 });
-// console.log(post);
-const createPost = (user) => {
-  axios({
-    method: "post",
-    url: "https://jsonplaceholder.typicode.com/posts",
-    data: post,
+
+const createPost = (post) => {
+//   axios({
+//     method: "post",
+//     url: "https://jsonplaceholder.typicode.com/posts",
+//     data: post,
+//   });
+
+  axios.post("https://jsonplaceholder.typicode.com/posts", post)
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.log(error);
   });
 };
-// createPost()
-// clear()
+createPost(newPost);
+clear()
+const newPost1 = JSON.stringify({
+  id: 1,
+  title: "Updated Title",
+  body: "Updated body",
+  userId: 1,
+});
+
+const updatePost = (id, data) => {
+  
+};
+
+updatePost(1, newPost1);
 const getUsers = async () => {
-    try {
-        const response = await axios.get(
-            "https://jsonplaceholder.typicode.com/users"
-        );
-        let users = JSON.stringify(response.data);
-        const saveUsers = (users) => {
-            fs.writeFile("users.txt", users, (err)=>{
-                if(err) throw err
-            })
-        };
-        saveUsers(users)
-      } catch (err) {
-        throw err;
-      }
-}
+  try {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    let users = JSON.stringify(response.data);
+    const saveUsers = (users) => {
+      fs.writeFile("users.txt", users, (err) => {
+        if (err) throw err;
+      });
+    };
+    saveUsers(users);
+  } catch (err) {
+    throw err;
+  }
+};
 // getUsers();
 
-
+// clear()
 app.listen(port, () => {
   // console.log(`app listening at http://localhost:${port}`);
 });
