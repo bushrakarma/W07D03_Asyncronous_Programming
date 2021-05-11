@@ -34,7 +34,7 @@ const getPost = (id) => {
       throw err;
     });
 };
-getPost(15)
+// getPost(15)
 
 const getPostAsync = async (id) => {
   try {
@@ -46,7 +46,24 @@ const getPostAsync = async (id) => {
     throw err;
   }
 };
-getPostAsync(15)
+// getPostAsync(15)
+
+const appendToFile = (data) => {
+    fs.appendFile("data.txt", `\n ${data}`, (err)=>{
+        if (err) throw err;
+        console.log("data appended")
+    })
+};
+// appendToFile("hello")
+
+
+const copyFile = (fileName) => {
+    fs.copyFile(fileName, `copy_of_${fileName}`, (err)=>{
+        if (err) throw err;
+        console.log("Done")
+    })
+};
+// copyFile("data.txt")
 app.listen(port, () => {
   // console.log(`app listening at http://localhost:${port}`);
 });
